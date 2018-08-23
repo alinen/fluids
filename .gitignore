@@ -1,0 +1,16 @@
+.svn
+GL
+DevIL1.6.7
+*.dll
+*.lib
+*.pdb
+*.swp
+*.swo
+*.exe
+*.ilk
+maya
+output
+*.zzz
+*.zip
+
+
