@@ -1,16 +1,13 @@
-.svn
-GL
-DevIL1.6.7
-*.dll
-*.lib
+build
+bin
+*~
+*.swp
 *.pdb
 *.swp
 *.swo
-*.exe
 *.ilk
-maya
 output
 *.zzz
 *.zip
-
+.svn
 
