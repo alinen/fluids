@@ -1,16 +1,8 @@
 #include "smokeSim.h"
 #include <GL/glut.h>
-#include <IL/il.h>
-#include <IL/ilu.h>
-#include <IL/ilut.h>
 
 SmokeSim::SmokeSim() : mFrameNum(0), mRecordEnabled(false)
 {
-   ilInit();
-   iluInit();
-   ilEnable(IL_FILE_OVERWRITE);
-   ilutRenderer(ILUT_OPENGL);
-
    reset();
 }
 
@@ -69,7 +61,6 @@ void SmokeSim::draw(const Camera& c)
 {
    drawAxes(); 
    mGrid.draw(c);
-   if (mRecordEnabled) grabScreen();
 }
 
 void SmokeSim::drawAxes()
@@ -92,43 +83,4 @@ void SmokeSim::drawAxes()
          glVertex3f(0.0, 0.0, 1.0);
       glEnd();
   glPopAttrib();
-}
-
-void SmokeSim::grabScreen()  // Code adapted from asst#1
-{
-	unsigned int image;
-   ilGenImages(1, &image);
-	ilBindImage(image);
-
-	ILenum error = ilGetError();
-	assert(error == IL_NO_ERROR);
-
-	ilTexImage(640, 480, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL);
-
-	error = ilGetError();
-	assert(error == IL_NO_ERROR);
-
-	unsigned char* data = ilGetData();
-
-	error = ilGetError();
-	assert(error == IL_NO_ERROR);
-
-	for (int i=479; i>=0; i--) 
-	{
-		glReadPixels(0,i,640,1,GL_RGB, GL_UNSIGNED_BYTE, 
-			data + (640 * 3 * i));
-	}
-
-	char anim_filename[2048];
-	sprintf_s(anim_filename, 2048, "output/smoke_%04d.png", mFrameNum++); 
-
-	ilSave(IL_PNG, anim_filename);
-
-	error = ilGetError();
-	assert(error == IL_NO_ERROR);
-
-	ilDeleteImages(1, &image);
-
-	error = ilGetError();
-	assert(error == IL_NO_ERROR);
 }

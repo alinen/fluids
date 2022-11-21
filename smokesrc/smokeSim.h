@@ -22,7 +22,6 @@ public:
 
 protected:
    virtual void drawAxes();
-   virtual void grabScreen();
 
 protected:
    MACGrid mGrid;
