@@ -30,6 +30,9 @@ if (WIN32) # Include win64 platforms
   set(CORE ${GLEW} ${GLFW} opengl32.lib)
   set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
   set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
+  add_custom_command ( TARGET smokesim POST_BUILD
+	  COMMAND  cp ../../external/lib/freeglut.dll ${CMAKE_SOURCE_DIR}/bin/Debug
+  )
 
 
 elseif (APPLE)
@@ -55,6 +58,7 @@ elseif (UNIX)
   set(CMAKE_CXX_FLAGS "-Wall -g -std=c++11 -Wno-comment")
   set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
   set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+  set(OpenGL_GL_PREFERENCE LEGACY)
 
   FIND_PACKAGE(OpenGL REQUIRED) 
   FIND_PACKAGE(GLEW REQUIRED)
@@ -98,6 +102,3 @@ set(SOURCES
 
 add_executable(smokesim ${SOURCES} )
 target_link_libraries(smokesim ${CORE})
-  add_custom_command ( TARGET smokesim POST_BUILD
-	  COMMAND  cp ../../external/lib/freeglut.dll ${CMAKE_SOURCE_DIR}/bin/Debug
-  )

@@ -276,9 +276,13 @@ public:
    bool IsUpperTriangular () _NO_THROW;
    bool IsLowerTriangular () _NO_THROW;
 
+   static matrixT TranslationMatrix(T x, T y, T z);
+   static matrixT RotationMatrix(int axis, T angle);
+   static matrixT ScaleMatrix(T x, T y, T z);
+
 protected:
-    struct base_mat
-    {
+   struct base_mat
+   {
 	T **Val;
 	size_t Row, Col, RowSiz, ColSiz;
 	int Refcnt;
@@ -311,26 +315,6 @@ protected:
     void realloc (size_t row, size_t col);
     int pivot (size_t row);
 };
-
-MAT_TEMPLATE class TranslationMatrix : public matrixT
-{
-public:
-    TranslationMatrix(T x, T y, T z);  
-};
-
-MAT_TEMPLATE class RotationMatrix : public matrixT
-{
-public:
-    RotationMatrix(int axis, double angle);  // angle in radians
-};
-
-MAT_TEMPLATE class ScaleMatrix : public matrixT
-{
-public:
-    ScaleMatrix(T x, T y, T z);  // angle in radians
-};
-
-
 
 #if defined(_MSC_VER) && _MSC_VER <= 1020
 #  undef  _NO_THROW               // MSVC++ 4.0/4.2 does not support 
@@ -1105,48 +1089,54 @@ matrixT::IsLowerTriangular () _NO_THROW
    return true;
 }
 
-MAT_TEMPLATE inline
-TranslationMatrix<T>::TranslationMatrix (T x, T y, T z) : matrixT(4, 4)
+MAT_TEMPLATE inline matrixT
+matrixT::TranslationMatrix (T x, T y, T z)
 {
-  _m->Val[0][0] = T(1); _m->Val[0][1] = T(0); _m->Val[0][2] = T(0); _m->Val[0][3] = x;
-  _m->Val[1][0] = T(0); _m->Val[1][1] = T(1); _m->Val[1][2] = T(0); _m->Val[1][3] = y;
-  _m->Val[2][0] = T(0); _m->Val[2][1] = T(0); _m->Val[2][2] = T(1); _m->Val[2][3] = z;
-  _m->Val[3][0] = T(0); _m->Val[3][1] = T(0); _m->Val[3][2] = T(0); _m->Val[3][3] = T(1);
+  matrixT m;
+  m._m->Val[0][0] = T(1); m._m->Val[0][1] = T(0); m._m->Val[0][2] = T(0); m._m->Val[0][3] = x;
+  m._m->Val[1][0] = T(0); m._m->Val[1][1] = T(1); m._m->Val[1][2] = T(0); m._m->Val[1][3] = y;
+  m._m->Val[2][0] = T(0); m._m->Val[2][1] = T(0); m._m->Val[2][2] = T(1); m._m->Val[2][3] = z;
+  m._m->Val[3][0] = T(0); m._m->Val[3][1] = T(0); m._m->Val[3][2] = T(0); m._m->Val[3][3] = T(1);
+  return m;
 }
 
-MAT_TEMPLATE inline
-RotationMatrix<T>::RotationMatrix (int axis, double angle) : matrixT(4, 4)
+MAT_TEMPLATE inline matrixT
+matrixT::RotationMatrix (int axis, T angle) 
 {
+   matrixT m;
   if (axis == 0)  // X
   {
-      _m->Val[0][0] = 1;           _m->Val[0][1] = 0;          _m->Val[0][2] =  0;          _m->Val[0][3] = 0;
-      _m->Val[1][0] = 0;           _m->Val[1][1] = cos(angle); _m->Val[1][2] = -sin(angle); _m->Val[1][3] = 0;
-      _m->Val[2][0] = 0;           _m->Val[2][1] = sin(angle); _m->Val[2][2] = cos(angle);  _m->Val[2][3] = 0;
-      _m->Val[3][0] = 0;           _m->Val[3][1] = 0;          _m->Val[3][2] = 0;           _m->Val[3][3] = 1;
+      m._m->Val[0][0] = 1;           m._m->Val[0][1] = 0;          m._m->Val[0][2] =  0;          m._m->Val[0][3] = 0;
+      m._m->Val[1][0] = 0;           m._m->Val[1][1] = cos(angle); m._m->Val[1][2] = -sin(angle); m._m->Val[1][3] = 0;
+      m._m->Val[2][0] = 0;           m._m->Val[2][1] = sin(angle); m._m->Val[2][2] = cos(angle);  m._m->Val[2][3] = 0;
+      m._m->Val[3][0] = 0;           m._m->Val[3][1] = 0;          m._m->Val[3][2] = 0;           m._m->Val[3][3] = 1;
   }
   else if (axis == 1)  // Y
   {
-      _m->Val[0][0] = cos(angle);  _m->Val[0][1] = 0;           _m->Val[0][2] =  sin(angle); _m->Val[0][3] = 0;
-      _m->Val[1][0] = 0;           _m->Val[1][1] = 1;           _m->Val[1][2] = 0;           _m->Val[1][3] = 0;
-      _m->Val[2][0] = -sin(angle); _m->Val[2][1] = 0;           _m->Val[2][2] = cos(angle);  _m->Val[2][3] = 0;
-      _m->Val[3][0] = 0;           _m->Val[3][1] = 0;           _m->Val[3][2] = 0;           _m->Val[3][3] = 1;
+      m._m->Val[0][0] = cos(angle);  m._m->Val[0][1] = 0;           m._m->Val[0][2] =  sin(angle); m._m->Val[0][3] = 0;
+      m._m->Val[1][0] = 0;           m._m->Val[1][1] = 1;           m._m->Val[1][2] = 0;           m._m->Val[1][3] = 0;
+      m._m->Val[2][0] = -sin(angle); m._m->Val[2][1] = 0;           m._m->Val[2][2] = cos(angle);  m._m->Val[2][3] = 0;
+      m._m->Val[3][0] = 0;           m._m->Val[3][1] = 0;           m._m->Val[3][2] = 0;           m._m->Val[3][3] = 1;
   }
   else if (axis == 2) // Z
   {
-      _m->Val[0][0] = cos(angle); _m->Val[0][1] = -sin(angle); _m->Val[0][2] = 0;            _m->Val[0][3] = 0;
-      _m->Val[1][0] = sin(angle); _m->Val[1][1] = cos(angle);  _m->Val[1][2] = 0;            _m->Val[1][3] = 0;
-      _m->Val[2][0] = 0;          _m->Val[2][1] = 0;           _m->Val[2][2] = 1;            _m->Val[2][3] = 0;
-      _m->Val[3][0] = 0;          _m->Val[3][1] = 0;           _m->Val[3][2] = 0;            _m->Val[3][3] = 1;
+      m._m->Val[0][0] = cos(angle); m._m->Val[0][1] = -sin(angle); m._m->Val[0][2] = 0;            m._m->Val[0][3] = 0;
+      m._m->Val[1][0] = sin(angle); m._m->Val[1][1] = cos(angle);  m._m->Val[1][2] = 0;            m._m->Val[1][3] = 0;
+      m._m->Val[2][0] = 0;          m._m->Val[2][1] = 0;           m._m->Val[2][2] = 1;            m._m->Val[2][3] = 0;
+      m._m->Val[3][0] = 0;          m._m->Val[3][1] = 0;           m._m->Val[3][2] = 0;            m._m->Val[3][3] = 1;
   }
+  return m;
 }
 
-MAT_TEMPLATE inline
-ScaleMatrix<T>::ScaleMatrix (T x, T y, T z) : matrixT(4, 4)
+MAT_TEMPLATE inline matrixT
+matrixT::ScaleMatrix (T x, T y, T z) 
 {
-  _m->Val[0][0] = x;    _m->Val[0][1] = T(0); _m->Val[0][2] = T(0); _m->Val[0][3] = T(0);
-  _m->Val[1][0] = T(0); _m->Val[1][1] = y;    _m->Val[1][2] = T(0); _m->Val[1][3] = T(0);
-  _m->Val[2][0] = T(0); _m->Val[2][1] = T(0); _m->Val[2][2] = z;    _m->Val[2][3] = T(0);
-  _m->Val[3][0] = T(0); _m->Val[3][1] = T(0); _m->Val[3][2] = T(0); _m->Val[3][3] = T(1);
+  matrixT m;
+  m._m->Val[0][0] = x;    m._m->Val[0][1] = T(0); m._m->Val[0][2] = T(0); m._m->Val[0][3] = T(0);
+  m._m->Val[1][0] = T(0); m._m->Val[1][1] = y;    m._m->Val[1][2] = T(0); m._m->Val[1][3] = T(0);
+  m._m->Val[2][0] = T(0); m._m->Val[2][1] = T(0); m._m->Val[2][2] = z;    m._m->Val[2][3] = T(0);
+  m._m->Val[3][0] = T(0); m._m->Val[3][1] = T(0); m._m->Val[3][2] = T(0); m._m->Val[3][3] = T(1);
+  return m;
 }
 
 MAT_TEMPLATE inline vec3 operator* (const matrixT& m, const vec3& v) _THROW_MATRIX_ERROR // transform point

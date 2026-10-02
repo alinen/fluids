@@ -85,7 +85,7 @@ namespace mmc
 
     inline
     Timer::Timer ()
-        : start_(0), last_(0), now_(0), elapsed_(0)
+        : start_(0), now_(0), last_(0), elapsed_(0)
     {
 #ifdef WIN32
         QueryPerformanceFrequency((LARGE_INTEGER *) &freq_);

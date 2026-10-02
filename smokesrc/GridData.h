@@ -5,7 +5,9 @@
 #ifndef GridData_H_
 #define GridData_H_
 
+#ifdef WIN32
 #pragma warning(disable: 4244 4267 4996)
+#endif
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
 using namespace boost::numeric;

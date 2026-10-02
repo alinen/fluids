@@ -4,13 +4,16 @@
 #ifndef MACGrid_H_
 #define MACGrid_H_
 
+#ifdef WIN32
 #pragma warning(disable: 4244 4267 4996)
+#include <windows.h>
+#endif
+
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 using namespace boost::numeric;
 
-#include <windows.h>
 #include "GL/gl.h"
 #include "vec.h"
 #include "GridData.h"

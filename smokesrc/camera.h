@@ -4,7 +4,9 @@
 
 #ifndef camera_H_
 #define camera_H_
+#ifdef WIN32
 #include <windows.h>
+#endif
 
 #include "GL/gl.h"
 #include "vec.h"

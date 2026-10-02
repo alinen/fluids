@@ -3,10 +3,10 @@
 #define LERP(a,b,t) (1-t)*a + t*b
 
 
-//int theDim[3] = {2, 2, 1};
+int theDim[3] = {2, 2, 1};
 //int theDim[3] = {3, 3, 1};
 //int theDim[3] = {40, 30, 1};
-int theDim[3] = {10, 5, 1};
+//int theDim[3] = {10, 5, 1};
 
 double theCellSize = 0.5;
 

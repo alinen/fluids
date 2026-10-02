@@ -20,7 +20,7 @@ bool isRunning = true;
 
 void initCamera()
 {
-   extern int theDim[3]; // Naughty globals...
+   extern int theDim[3]; // ASN: Set parameters with cmd line arguments
    extern double theCellSize;
    double w = theDim[0]*theCellSize;   
    double h = theDim[1]*theCellSize;   
@@ -202,7 +202,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(640, 480);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Fluid Simulation - CIS563");
+    glutCreateWindow("Smoke Simulation");
     glutDisplayFunc(onDrawCb);
     glutKeyboardFunc(onKeyboardCb);
     glutSpecialFunc(onKeyboardSpecialCb);
